@@ -91,7 +91,7 @@ def input_user() -> Response | str:
 
 @app.route('/account_user/', methods=['GET', 'POST'])
 @login_required
-def account_user():
+def account_user() -> Response:
     """
         Views для страницы аккаунта пользователя.
         Извлекает из базы данных рецепты пользователя с помощью его id.
@@ -108,7 +108,7 @@ def account_user():
 
 @app.route('/open_recept/<int:recept_id>')
 @login_required
-def open_recept(recept_id):
+def open_recept(recept_id)  -> Response:
     """
         Views для страницы отображения выбранного рецепта.
 
@@ -128,7 +128,7 @@ def open_recept(recept_id):
 
 
 @app.route('/firs_recipe/')
-def firs_recipe():
+def firs_recipe() -> Response:
     """
         Views для страницы с рецептами первых блюд.
 
@@ -141,7 +141,7 @@ def firs_recipe():
 
 
 @app.route('/second_recipe/')
-def second_recipe():
+def second_recipe() -> Response:
     """
             Views для страницы с рецептами вторых блюд.
 
@@ -154,7 +154,7 @@ def second_recipe():
 
 
 @app.route('/snake/')
-def snake():
+def snake() -> Response:
     """
             Views для страницы с рецептами закусок.
 
@@ -167,7 +167,7 @@ def snake():
 
 
 @app.route('/dough_recipes/')
-def dough_recipes():
+def dough_recipes() -> Response:
     """
         Views для страницы с рецептами изделий из текста.
 
@@ -180,7 +180,7 @@ def dough_recipes():
 
 
 @app.route('/sweet_recipes/')
-def sweet_recipes():
+def sweet_recipes() -> Response:
     """
         Views для страницы с рецептами сладостей.
 
@@ -193,7 +193,7 @@ def sweet_recipes():
 
 
 @app.route('/blank_recipes/')
-def blank_recipes():
+def blank_recipes() -> Response:
     """
         Views для страницы с рецептами заготовок.
 
@@ -207,7 +207,7 @@ def blank_recipes():
 
 @app.route('/recipe_create/', methods=['GET', 'POST'])
 @login_required
-def recipe_create():
+def recipe_create() -> Response | str:
     """
         Views для создания рецепта.
 
@@ -253,7 +253,7 @@ def recipe_create():
 
 @app.route("/logout/")
 @login_required
-def logout():
+def logout() -> Response | str:
     """
     Функция для выхода из профиля пользователя.
 
@@ -265,7 +265,7 @@ def logout():
 
 
 @app.after_request
-def redirect_to_sign(response):
+def redirect_to_sign(response) -> Response:
     if response.status_code == 401:
         return redirect(url_for('input_user'))
     return response
