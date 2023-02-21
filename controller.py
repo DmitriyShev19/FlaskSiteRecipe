@@ -91,7 +91,7 @@ def input_user() -> Response | str:
 
 @app.route('/account_user/', methods=['GET', 'POST'])
 @login_required
-def account_user():
+def account_user() -> Response:
     """
         Views для страницы аккаунта пользователя.
         Извлекает из базы данных рецепты пользователя с помощью его id.
@@ -108,7 +108,7 @@ def account_user():
 
 @app.route('/open_recept/<int:recept_id>')
 @login_required
-def open_recept(recept_id):
+def open_recept(recept_id: int) -> Response:
     """
         Views для страницы отображения выбранного рецепта.
 
@@ -128,7 +128,7 @@ def open_recept(recept_id):
 
 
 @app.route('/firs_recipe/')
-def firs_recipe():
+def firs_recipe() -> Response:
     """
         Views для страницы с рецептами первых блюд.
 
@@ -141,65 +141,65 @@ def firs_recipe():
 
 
 @app.route('/second_recipe/')
-def second_recipe():
+def second_recipe() -> Response:
     """
-            Views для страницы с рецептами вторых блюд.
+        Views для страницы с рецептами вторых блюд.
 
-            Возвращает страницу со списком всех рецептов вторых блюд.
+        Возвращает страницу со списком всех рецептов вторых блюд.
 
-            :return: render_template('second_course_recipes.html', receipts=receipts)
+        :return: render_template('second_course_recipes.html', receipts=receipts)
     """
     receipts = Recipe.query.filter_by(food_category='Рецепты вторых блюд').all()
     return render_template('second_course_recipes.html', receipts=receipts)
 
 
 @app.route('/snake/')
-def snake():
+def snake() -> Response:
     """
-            Views для страницы с рецептами закусок.
+        Views для страницы с рецептами закусок.
 
-            Возвращает страницу со списком всех рецептов закусок.
+        Возвращает страницу со списком всех рецептов закусок.
 
-            :return: return render_template('snack_recipes.html', receipts=receipts)
+        :return: return render_template('snack_recipes.html', receipts=receipts)
     """
     receipts = Recipe.query.filter_by(food_category='Рецепты закусок').all()
     return render_template('snack_recipes.html', receipts=receipts)
 
 
 @app.route('/dough_recipes/')
-def dough_recipes():
+def dough_recipes() -> Response:
     """
         Views для страницы с рецептами изделий из текста.
 
         Возвращает страницу со списком всех рецептов изделий из теста.
 
-        return render_template('dough_recipes.html', receipts=receipts)
+        :return: render_template('dough_recipes.html', receipts=receipts)
     """
     receipts = Recipe.query.filter_by(food_category='Рецепты изделий из теста').all()
     return render_template('dough_recipes.html', receipts=receipts)
 
 
 @app.route('/sweet_recipes/')
-def sweet_recipes():
+def sweet_recipes() -> Response:
     """
         Views для страницы с рецептами сладостей.
 
         Возвращает страницу со списком всех рецептов сладостей.
 
-        return render_template('sweet_recipes.html', receipts=receipts)
+        :return: render_template('sweet_recipes.html', receipts=receipts)
     """
     receipts = Recipe.query.filter_by(food_category='Рецепты сладостей').all()
     return render_template('sweet_recipes.html', receipts=receipts)
 
 
 @app.route('/blank_recipes/')
-def blank_recipes():
+def blank_recipes() -> Response:
     """
         Views для страницы с рецептами заготовок.
 
         Возвращает страницу со списком всех рецептов сладостей.
 
-        return render_template('snack_recipes.html', receipts=receipts)
+        :return: render_template('snack_recipes.html', receipts=receipts)
     """
     receipts = Recipe.query.filter_by(food_category='Рецепты заготовок').all()
     return render_template('snack_recipes.html', receipts=receipts)
@@ -207,7 +207,7 @@ def blank_recipes():
 
 @app.route('/recipe_create/', methods=['GET', 'POST'])
 @login_required
-def recipe_create():
+def recipe_create() -> Response | str:
     """
         Views для создания рецепта.
 
@@ -253,7 +253,7 @@ def recipe_create():
 
 @app.route("/logout/")
 @login_required
-def logout():
+def logout() -> Response | str:
     """
     Функция для выхода из профиля пользователя.
 
@@ -265,7 +265,19 @@ def logout():
 
 
 @app.after_request
-def redirect_to_sign(response):
+def redirect_to_sign(response) -> Response:
+    """
+        Функция, которая перенаправляет неавторизованных пользователей на страницу входа.
+        Если HTTP-ответ имеет код 401 (Unauthorized), функция перенаправляет пользователя на страницу входа.
+        Если HTTP-ответ имеет любой другой код, функция возвращает ответ без изменений.
+
+        :param response: HTTP-ответ, который будет проверен на наличие кода 401.
+        :type response: flask.wrappers.Response
+
+        :return: HTTP-ответ, который был получен в качестве аргумента, если его код не равен 401.
+                 Если код равен 401, функция перенаправляет пользователя на страницу входа.
+        :rtype: Union[flask.wrappers.Response, werkzeug.utils.redirect]
+    """
     if response.status_code == 401:
         return redirect(url_for('input_user'))
     return response
