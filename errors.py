@@ -1,4 +1,3 @@
-
 from app import app
 from flask import redirect, render_template, flash, url_for, Response
 
@@ -11,9 +10,10 @@ def error401(status) -> Response:
     :return: None
     """
     flash(
-        {"title": "Внимание!", "message": "Необходимо авторизоваться."}, category="info"
+        {'title': 'Внимание!', 'message': 'Необходимо авторизоваться.'},
+        category='info',
     )
-    return redirect(url_for("input_user")), 301
+    return redirect(url_for('input_user')), 301
 
 
 @app.errorhandler(404)
@@ -23,7 +23,7 @@ def error404(status) -> str:
     :param status: int(Код ошибки)
     :return: error404.html (Шаблон страницы ошибки)
     """
-    return render_template("errors/error404.html")
+    return render_template('errors/error404.html')
 
 
 @app.errorhandler(429)
@@ -33,4 +33,4 @@ def error429(status) -> str:
     :param status: int(Код ошибки)
     :return: error429.html (Шаблон страницы ошибки)
     """
-    return render_template("errors/error429.html")
+    return render_template('errors/error429.html')
