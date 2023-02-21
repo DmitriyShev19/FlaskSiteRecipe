@@ -1,7 +1,7 @@
 import re
 from flask import flash
 from app import ALLOWED_EXTENSIONS
-from models import Users
+from models import User
 
 
 def check_new_user(login: str, email: str, password: str) -> bool:
@@ -39,10 +39,10 @@ def check_new_user(login: str, email: str, password: str) -> bool:
     pattern_login = r'^[a-zA-Z!?\d]{5,25}$'
     pattern_email = r'^[-\w\.]+@([-\w]+\.)+[-\w]{2,4}$'
     pattern_password = r'^[a-zA-Z!?\d]{5,36}$'
-    if Users.query.filter_by(login=login).first():
+    if User.query.filter_by(login=login).first():
         flash({"title": "Ошибка!", "message": "Такой пользователь уже существует"}, category="error")
         return False
-    elif Users.query.filter_by(email=email).first():
+    elif User.query.filter_by(email=email).first():
         flash({"title": "Ошибка!",
                "message": "Пользователь с таким E-mail уже есть"},
               category="error")

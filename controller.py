@@ -4,7 +4,7 @@ from flask import request
 from flask_login import login_required, login_user, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
-from models import Users, Recipe
+from models import User, Recipe
 from errors import *
 from bisnes_logic import check_new_user, allowed_file
 
@@ -50,7 +50,7 @@ def register() -> Response | str:
     if check_new_user(login=login, email=email, password=password):
         forms = dict(request.form)
         forms['password'] = generate_password_hash(password)
-        Users.create(**forms)
+        User.create(**forms)
         return redirect(url_for('input_user'))
     else:
         return render_template('register.html')
@@ -78,7 +78,7 @@ def input_user() -> Response | str:
         return render_template('input_user.html')
     email = request.form.get('email', '_')
     password = request.form.get('password', '_')
-    user = Users.query.filter_by(email=email).first()
+    user = User.query.filter_by(email=email).first()
     if user and check_password_hash(user.password, password):
         login_user(user)
         flash({'title': 'Успешно!', 'message': 'Добро пожаловать'}, category='success')
