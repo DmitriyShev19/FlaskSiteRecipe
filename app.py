@@ -1,9 +1,9 @@
+import uuid
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_toastr import Toastr
 from flask_debugtoolbar import DebugToolbarExtension
-import uuid
 
 app = Flask(__name__)
 
