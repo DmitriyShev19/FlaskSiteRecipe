@@ -59,21 +59,21 @@ def register() -> Response | str:
 @app.route('/input_user/', methods=['GET', 'POST'])
 def input_user() -> Response | str:
     """
-        Views для страницы входа пользователя.
+    Views для страницы входа пользователя.
 
-        GET запрос:
-        Возвращает страницу с формой для входа.
+    GET запрос:
+    Возвращает страницу с формой для входа.
 
-        POST запрос:
-        Извлекает из запроса email и password.
-        Если пользователь с такими данными найден в базе данных,
-        то он аутентифицируется и перенаправляется на страницу аккаунта.
-        В противном случае пользователю выводится сообщение об ошибке.
+    POST запрос:
+    Извлекает из запроса email и password.
+    Если пользователь с такими данными найден в базе данных,
+    то он аутентифицируется и перенаправляется на страницу аккаунта.
+    В противном случае пользователю выводится сообщение об ошибке.
 
-        :return: render_template(input_user.html) в случае GET запроса,
-                 redirect(url_for('account_user')) в случае успешного входа,
-                 render_template(input_user.html) в случае ошибки входа.
-        """
+    :return: render_template(input_user.html) в случае GET запроса,
+             redirect(url_for('account_user')) в случае успешного входа,
+             render_template(input_user.html) в случае ошибки входа.
+    """
     if request.method == 'GET':
         return render_template('input_user.html')
     email = request.form.get('email', '_')
@@ -81,11 +81,19 @@ def input_user() -> Response | str:
     user = User.query.filter_by(email=email).first()
     if user and check_password_hash(user.password, password):
         login_user(user)
-        flash({'title': 'Успешно!', 'message': 'Добро пожаловать'}, category='success')
+        flash(
+            {'title': 'Успешно!', 'message': 'Добро пожаловать'},
+            category='success',
+        )
         return redirect(url_for('account_user'))
     else:
-        flash({"title": "Ошибка!", "message": "Мы не нашли такого пользователя"},
-              category="error")
+        flash(
+            {
+                'title': 'Ошибка!',
+                'message': 'Мы не нашли такого пользователя',
+            },
+            category='error',
+        )
         return render_template('input_user.html')
 
 
@@ -93,15 +101,15 @@ def input_user() -> Response | str:
 @login_required
 def account_user() -> Response:
     """
-        Views для страницы аккаунта пользователя.
-        Извлекает из базы данных рецепты пользователя с помощью его id.
+    Views для страницы аккаунта пользователя.
+    Извлекает из базы данных рецепты пользователя с помощью его id.
 
-        GET запрос:
-        Возвращает страницу аккаунта пользователя, на которой отображены его рецепты.
-        Если пользователь не аутентифицирован, перенаправляет на страницу входа.
+    GET запрос:
+    Возвращает страницу аккаунта пользователя, на которой отображены его рецепты.
+    Если пользователь не аутентифицирован, перенаправляет на страницу входа.
 
-        :return: render_template(account_user.html, recept_user=recept_user)
-        """
+    :return: render_template(account_user.html, recept_user=recept_user)
+    """
     recept_user = Recipe.query.filter_by(id_user=current_user.id).all()
     return render_template('account_user.html', recept_user=recept_user)
 
@@ -110,19 +118,19 @@ def account_user() -> Response:
 @login_required
 def open_recept(recept_id: int) -> Response:
     """
-        Views для страницы отображения выбранного рецепта.
+    Views для страницы отображения выбранного рецепта.
 
-        GET запрос:
-        Извлекает из запроса id рецепта.
-        Если пользователь аутентифицирован и рецепт с таким id найден в базе данных,
-        то пользователю выводится страница с детальной информацией о рецепте.
-        В противном случае пользователю выводится сообщение об ошибке.
+    GET запрос:
+    Извлекает из запроса id рецепта.
+    Если пользователь аутентифицирован и рецепт с таким id найден в базе данных,
+    то пользователю выводится страница с детальной информацией о рецепте.
+    В противном случае пользователю выводится сообщение об ошибке.
 
-        :param recept_id: идентификатор рецепта.
-        :type recept_id: int
+    :param recept_id: идентификатор рецепта.
+    :type recept_id: int
 
-        :return: render_template(open_recept.html, recept=recept) в случае успешного отображения рецепта
-        """
+    :return: render_template(open_recept.html, recept=recept) в случае успешного отображения рецепта
+    """
     recept = Recipe.query.filter_by(id=recept_id).first()
     return render_template('open_recept.html', recept=recept)
 
@@ -130,37 +138,41 @@ def open_recept(recept_id: int) -> Response:
 @app.route('/firs_recipe/')
 def firs_recipe() -> Response:
     """
-        Views для страницы с рецептами первых блюд.
+    Views для страницы с рецептами первых блюд.
 
-        Возвращает страницу со списком всех рецептов первых блюд.
+    Возвращает страницу со списком всех рецептов первых блюд.
 
-        :return: render_template(first_course_recipes.html, receipts=receipts)
+    :return: render_template(first_course_recipes.html, receipts=receipts)
     """
-    receipts = Recipe.query.filter_by(food_category='Рецепты первых блюд').all()
+    receipts = Recipe.query.filter_by(
+        food_category='Рецепты первых блюд'
+    ).all()
     return render_template('first_course_recipes.html', receipts=receipts)
 
 
 @app.route('/second_recipe/')
 def second_recipe() -> Response:
     """
-        Views для страницы с рецептами вторых блюд.
+    Views для страницы с рецептами вторых блюд.
 
-        Возвращает страницу со списком всех рецептов вторых блюд.
+    Возвращает страницу со списком всех рецептов вторых блюд.
 
-        :return: render_template('second_course_recipes.html', receipts=receipts)
+    :return: render_template('second_course_recipes.html', receipts=receipts)
     """
-    receipts = Recipe.query.filter_by(food_category='Рецепты вторых блюд').all()
+    receipts = Recipe.query.filter_by(
+        food_category='Рецепты вторых блюд'
+    ).all()
     return render_template('second_course_recipes.html', receipts=receipts)
 
 
 @app.route('/snake/')
 def snake() -> Response:
     """
-        Views для страницы с рецептами закусок.
+    Views для страницы с рецептами закусок.
 
-        Возвращает страницу со списком всех рецептов закусок.
+    Возвращает страницу со списком всех рецептов закусок.
 
-        :return: return render_template('snack_recipes.html', receipts=receipts)
+    :return: return render_template('snack_recipes.html', receipts=receipts)
     """
     receipts = Recipe.query.filter_by(food_category='Рецепты закусок').all()
     return render_template('snack_recipes.html', receipts=receipts)
@@ -169,24 +181,26 @@ def snake() -> Response:
 @app.route('/dough_recipes/')
 def dough_recipes() -> Response:
     """
-        Views для страницы с рецептами изделий из текста.
+    Views для страницы с рецептами изделий из текста.
 
-        Возвращает страницу со списком всех рецептов изделий из теста.
+    Возвращает страницу со списком всех рецептов изделий из теста.
 
-        :return: render_template('dough_recipes.html', receipts=receipts)
+    :return: render_template('dough_recipes.html', receipts=receipts)
     """
-    receipts = Recipe.query.filter_by(food_category='Рецепты изделий из теста').all()
+    receipts = Recipe.query.filter_by(
+        food_category='Рецепты изделий из теста'
+    ).all()
     return render_template('dough_recipes.html', receipts=receipts)
 
 
 @app.route('/sweet_recipes/')
 def sweet_recipes() -> Response:
     """
-        Views для страницы с рецептами сладостей.
+    Views для страницы с рецептами сладостей.
 
-        Возвращает страницу со списком всех рецептов сладостей.
+    Возвращает страницу со списком всех рецептов сладостей.
 
-        :return: render_template('sweet_recipes.html', receipts=receipts)
+    :return: render_template('sweet_recipes.html', receipts=receipts)
     """
     receipts = Recipe.query.filter_by(food_category='Рецепты сладостей').all()
     return render_template('sweet_recipes.html', receipts=receipts)
@@ -195,11 +209,11 @@ def sweet_recipes() -> Response:
 @app.route('/blank_recipes/')
 def blank_recipes() -> Response:
     """
-        Views для страницы с рецептами заготовок.
+    Views для страницы с рецептами заготовок.
 
-        Возвращает страницу со списком всех рецептов сладостей.
+    Возвращает страницу со списком всех рецептов сладостей.
 
-        :return: render_template('snack_recipes.html', receipts=receipts)
+    :return: render_template('snack_recipes.html', receipts=receipts)
     """
     receipts = Recipe.query.filter_by(food_category='Рецепты заготовок').all()
     return render_template('snack_recipes.html', receipts=receipts)
@@ -209,21 +223,21 @@ def blank_recipes() -> Response:
 @login_required
 def recipe_create() -> Response | str:
     """
-        Views для создания рецепта.
+    Views для создания рецепта.
 
-        GET запрос:
-        Возвращает страницу с формой для создания рецепта.
+    GET запрос:
+    Возвращает страницу с формой для создания рецепта.
 
-        POST запрос:
-        Извлекает из запроса параметры, необходимые для создания рецепта:
-        название блюда, id пользователя, категория блюда, время приготовления,
-        список ингредиентов, список их количества и список мер, описание приготовления
-        и изображение. Затем создает объект Recipe в базе данных и перенаправляет
-        пользователя на страницу его аккаунта.
+    POST запрос:
+    Извлекает из запроса параметры, необходимые для создания рецепта:
+    название блюда, id пользователя, категория блюда, время приготовления,
+    список ингредиентов, список их количества и список мер, описание приготовления
+    и изображение. Затем создает объект Recipe в базе данных и перенаправляет
+    пользователя на страницу его аккаунта.
 
-        :return: render_template('recipe_creation.html') в случае GET запроса,
-                 redirect(url_for('account_user')) в случае успешного создания рецепта,
-                 redirect('recipe_creation') в случае ошибки при создании рецепта.
+    :return: render_template('recipe_creation.html') в случае GET запроса,
+             redirect(url_for('account_user')) в случае успешного создания рецепта,
+             redirect('recipe_creation') в случае ошибки при создании рецепта.
     """
     if request.method == 'GET':
         return render_template('recipe_creation.html')
@@ -237,21 +251,34 @@ def recipe_create() -> Response | str:
     recipe_step = request.form.get('recipe')
     file = request.files['file']
     if file.filename == '':
-        flash({"title": "Ошибка!", "message": "Вы не выбрали файл"})
+        flash({'title': 'Ошибка!', 'message': 'Вы не выбрали файл'})
         return redirect('recipe_creation')
     if file and allowed_file(file.filename):
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-        filename = secure_filename(f"{timestamp}_{file.filename}")
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        filename = secure_filename(f'{timestamp}_{file.filename}')
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
-        ingredients_str = ';'.join([f'{ing},{qty},{meas}' for ing, qty, meas in
-                                    zip(ingredient_list, quantity_list, measure_list)])
-        Recipe.create(dish_name=dish_name, id_user=id_user, food_category=food_category, cooking_time=cooking_time,
-                      ingredients=ingredients_str, recipe=recipe_step, file_path=file_path)
+        ingredients_str = ';'.join(
+            [
+                f'{ing},{qty},{meas}'
+                for ing, qty, meas in zip(
+                    ingredient_list, quantity_list, measure_list
+                )
+            ]
+        )
+        Recipe.create(
+            dish_name=dish_name,
+            id_user=id_user,
+            food_category=food_category,
+            cooking_time=cooking_time,
+            ingredients=ingredients_str,
+            recipe=recipe_step,
+            file_path=file_path,
+        )
         return redirect(url_for('account_user'))
 
 
-@app.route("/logout/")
+@app.route('/logout/')
 @login_required
 def logout() -> Response | str:
     """
@@ -259,24 +286,24 @@ def logout() -> Response | str:
 
     :return: Response (всплывает сообщение о выходе и перекидывает на страницу авторизации)
     """
-    flash({"title": "Успех", "message": "Вы вышли из аккаунта!"}, "success")
+    flash({'title': 'Успех', 'message': 'Вы вышли из аккаунта!'}, 'success')
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for('index'))
 
 
 @app.after_request
 def redirect_to_sign(response) -> Response:
     """
-        Функция, которая перенаправляет неавторизованных пользователей на страницу входа.
-        Если HTTP-ответ имеет код 401 (Unauthorized), функция перенаправляет пользователя на страницу входа.
-        Если HTTP-ответ имеет любой другой код, функция возвращает ответ без изменений.
+    Функция, которая перенаправляет неавторизованных пользователей на страницу входа.
+    Если HTTP-ответ имеет код 401 (Unauthorized), функция перенаправляет пользователя на страницу входа.
+    Если HTTP-ответ имеет любой другой код, функция возвращает ответ без изменений.
 
-        :param response: HTTP-ответ, который будет проверен на наличие кода 401.
-        :type response: flask.wrappers.Response
+    :param response: HTTP-ответ, который будет проверен на наличие кода 401.
+    :type response: flask.wrappers.Response
 
-        :return: HTTP-ответ, который был получен в качестве аргумента, если его код не равен 401.
-                 Если код равен 401, функция перенаправляет пользователя на страницу входа.
-        :rtype: Union[flask.wrappers.Response, werkzeug.utils.redirect]
+    :return: HTTP-ответ, который был получен в качестве аргумента, если его код не равен 401.
+             Если код равен 401, функция перенаправляет пользователя на страницу входа.
+    :rtype: Union[flask.wrappers.Response, werkzeug.utils.redirect]
     """
     if response.status_code == 401:
         return redirect(url_for('input_user'))
