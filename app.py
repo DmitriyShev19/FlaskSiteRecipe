@@ -1,3 +1,29 @@
+"""
+Модуль приложения Flask для создания блога.
+
+Модуль содержит объект приложения Flask, настройки базы данных и конфигурации.
+Также включает настройки инструментов отладки, Toastr для вывода уведомлений,
+LoginManager для управления авторизацией и конфигурации для загрузки файлов.
+
+Атрибуты:
+    app: Flask
+        Объект приложения Flask.
+    db: SQLAlchemy
+        Объект базы данных SQLAlchemy.
+    manager: LoginManager
+        Объект LoginManager для управления авторизацией.
+    toastr: Toastr
+        Объект Toastr для вывода уведомлений.
+    toolbar: DebugToolbarExtension
+        Объект DebugToolbarExtension для настройки инструментов отладки.
+
+Константы:
+    UPLOAD_FOLDER: str
+        Директория для загрузки файлов.
+    ALLOWED_EXTENSIONS: set
+        Разрешенные типы файлов для загрузки.
+"""
+
 import uuid
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
