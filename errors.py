@@ -5,7 +5,8 @@ from flask import redirect, render_template, flash, url_for, Response
 @app.errorhandler(401)
 def error401(status) -> Response:
     """
-    Функция обрабатывает ошибку HTTP 401, перенаправляя пользователя на страницу авторизации.
+    Функция обрабатывает ошибку HTTP 401, перенаправляя пользователя на
+    страницу авторизации.
     :param status: Int(Код ошибки)
     :return: None
     """
