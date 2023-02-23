@@ -1,7 +1,27 @@
+"""
+Этот модуль предоставляет функции для проверки регистрационных данных
+пользователя и расширения файла.
+
+Функции модуля:
+
+check_new_user(login: str, email: str, password: str) -> bool:
+Проверяет данные пользователя перед регистрацией.
+
+allowed_file(filename: str) -> bool:
+Проверяет расширение загружаемого файла и сравнивает его со списком
+разрешенных расширений.
+
+Переменные модуля:
+
+ALLOWED_EXTENSIONS:
+Список разрешенных расширений файлов.
+"""
+
 import re
+
 from flask import flash
-from app import ALLOWED_EXTENSIONS
 from models import User
+from app import ALLOWED_EXTENSIONS
 
 
 def check_new_user(login: str, email: str, password: str) -> bool:
@@ -9,7 +29,7 @@ def check_new_user(login: str, email: str, password: str) -> bool:
     Проверяет данные нового пользователя перед регистрацией.
 
     pattern_login - Эта регулярка проверяет,
-     соответствует ли строка следующим условиям:
+    соответствует ли строка следующим условиям:
     Длина строки от 5 до 25 символов.
     Строка может содержать только латинские буквы в верхнем и нижнем регистре,
     цифры, а также символы !, ?,.
@@ -30,13 +50,13 @@ def check_new_user(login: str, email: str, password: str) -> bool:
     пароля, который должен содержать только разрешенные символы и быть длиной
     не менее 5 и не более 36 символов.
 
-    :param login: логин пользователя
+    :param login: логин пользователя.
     :type login: str
-    :param email: электронная почта пользователя
+    :param email: электронная почта пользователя.
     :type email: str
-    :param password: пароль пользователя
+    :param password: пароль пользователя.
     :type password: str
-    :return: результат проверки
+    :return: результат проверки.
     :rtype: bool
     """
     pattern_login = r'^[a-zA-Z!?\d]{5,25}$'
@@ -64,8 +84,8 @@ def check_new_user(login: str, email: str, password: str) -> bool:
         flash(
             {
                 'title': 'Ошибка!',
-                'message': 'Логин должен состоять из 5-25 латинских букв,'
-                           ' цифр и символов!',
+                'message': 'Логин должен состоять из 5-25 латинских букв, '
+                           'цифр и символов!',
             },
             category='error',
         )
@@ -83,21 +103,20 @@ def check_new_user(login: str, email: str, password: str) -> bool:
         flash(
             {
                 'title': 'Ошибка!',
-                'message': 'Пароль должен состоять из 5-36 латинских букв,'
-                           ' цифр и символов',
+                'message': 'Пароль должен состоять из 5-36 латинских букв, '
+                           'цифр и символов',
             },
             category='error',
         )
         return False
-    else:
-        flash(
-            {
-                'title': 'Успешно!',
-                'message': 'Вы успешно зарегистрированы, зайдите в кабинет',
-            },
-            category='success',
-        )
-        return True
+    flash(
+        {
+            'title': 'Успешно!',
+            'message': 'Вы успешно зарегистрированы, зайдите в кабинет',
+        },
+        category='success',
+    )
+    return True
 
 
 def allowed_file(filename: str) -> bool:
@@ -110,7 +129,5 @@ def allowed_file(filename: str) -> bool:
     :return: результат проверки
     :rtype: bool
     """
-    return (
-        '.' in filename
-        and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-    )
+    filename_split = filename.rsplit('.', 1)[1].lower()
+    return '.' in filename and filename_split in ALLOWED_EXTENSIONS
