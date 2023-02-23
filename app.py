@@ -25,11 +25,12 @@ LoginManager для управления авторизацией и конфи�
 """
 
 import uuid
+
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-from flask_toastr import Toastr
 from flask_debugtoolbar import DebugToolbarExtension
+from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
+from flask_toastr import Toastr
 
 app = Flask(__name__)
 
@@ -44,7 +45,7 @@ app.config['TOASTR_SHOW_METHOD'] = 'show'
 app.config['TOASTR_TIMEOUT'] = 5000
 
 UPLOAD_FOLDER = 'static/uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = ('png', 'jpg', 'jpeg', 'gif')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 3 * 1024 * 1024
 

@@ -74,7 +74,7 @@ class Recipe(db.Model, BaseModel):
     :type recipe: str
     """
 
-    id_user = db.Column(db.Integer, db.ForeignKey('users.id'))
+    id_user = db.Column(db.Integer, db.ForeignKey('user.id'))
     dish_name = db.Column(db.String(100))
     food_category = db.Column(db.String(100))
     file_path = db.Column(db.String(700))
