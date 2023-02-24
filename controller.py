@@ -54,8 +54,7 @@ def register() -> Response | str:
         forms['password'] = generate_password_hash(password)
         User.create(**forms)
         return redirect(url_for('input_user'))
-    else:
-        return render_template('register.html')
+    return render_template('register.html')
 
 
 @app.route('/input_user/', methods=['GET', 'POST'])
@@ -88,15 +87,14 @@ def input_user() -> Response | str:
             category='success',
         )
         return redirect(url_for('account_user'))
-    else:
-        flash(
-            {
-                'title': 'Ошибка!',
-                'message': 'Мы не нашли такого пользователя',
-            },
-            category='error',
-        )
-        return render_template('input_user.html')
+    flash(
+        {
+            'title': 'Ошибка!',
+            'message': 'Мы не нашли такого пользователя',
+        },
+        category='error',
+    )
+    return render_template('input_user.html')
 
 
 @app.route('/account_user/', methods=['GET', 'POST'])
