@@ -1,10 +1,16 @@
+"""
+Этот модуль содержит набор функций, которые используются для реализации
+функциональности веб-приложения.
+"""
 import os
-from app import app
 from datetime import datetime
+
 from flask import request, redirect, render_template, flash, url_for, Response
 from flask_login import login_required, login_user, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+
+from app import app
 from models import User, Recipe
 from business_logic import check_new_user, allowed_file
 
