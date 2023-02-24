@@ -19,7 +19,7 @@
 ## Установка и запуск
 1. Клонировать репозиторий на локальный компьютер
 ```python
-git clone https://github.com/DmitriyShev19/FlaskSiteRecipe.git
+git clone https://github.com/DmitriyShev19/RecipeSite.git
 ```
 
 2. Перейти в директорию проекта
