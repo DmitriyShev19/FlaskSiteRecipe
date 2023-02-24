@@ -97,7 +97,7 @@ def input_user() -> Response | str:
     return render_template('input_user.html')
 
 
-@app.route('/account_user/', methods=['GET', 'POST'])
+@app.route('/account_user/')
 @login_required
 def account_user() -> Response:
     """
