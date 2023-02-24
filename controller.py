@@ -6,7 +6,7 @@ from flask_login import login_required, login_user, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from models import User, Recipe
-from bisnes_logic import check_new_user, allowed_file
+from business_logic import check_new_user, allowed_file
 
 
 @app.route('/', methods=['GET', 'POST'])
