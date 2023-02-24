@@ -1,5 +1,12 @@
-from app import app
+"""
+Этот модуль содержит функции-обработчики ошибок, которые используются в
+приложении для перенаправления пользователя на страницу с соответствующей
+ошибкой.
+"""
+
 from flask import redirect, render_template, flash, url_for, Response
+
+from app import app
 
 
 @app.errorhandler(401)

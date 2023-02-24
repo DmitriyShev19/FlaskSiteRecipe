@@ -1,5 +1,12 @@
+"""
+Этот модуль содержит описания моделей пользователей и рецептов.
+Он использует Flask и Flask-Login для создания веб-приложения, которое может
+хранить информацию о пользователях и рецептах.
+"""
 import datetime
+
 from flask_login import UserMixin
+
 from app import db, app, manager
 
 
