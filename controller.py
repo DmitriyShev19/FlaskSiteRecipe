@@ -9,8 +9,8 @@ from models import User, Recipe
 from business_logic import check_new_user, allowed_file
 
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index/', methods=['GET', 'POST'])
+@app.route('/')
+@app.route('/index/')
 def index() -> Response | str:
     """
     Views для главной страницы.
