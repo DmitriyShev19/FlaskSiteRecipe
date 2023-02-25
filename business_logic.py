@@ -59,7 +59,7 @@ def check_new_user(login: str, email: str, password: str) -> bool:
     :return: результат проверки.
     :rtype: bool
     """
-    pattern_login = r'^[a-zA-Z!?\d]{5,25}$'
+    pattern_login = r'^[a-zA-Z!?\d]{5,25}$'  # Регулярки объясняются в доке
     pattern_email = r'^[-\w\.]+@([-\w]+\.)+[-\w]{2,4}$'
     pattern_password = r'^[a-zA-Z!?\d]{5,36}$'
     if User.query.filter_by(login=login).first():

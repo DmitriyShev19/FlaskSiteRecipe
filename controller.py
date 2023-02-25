@@ -261,29 +261,31 @@ def recipe_create() -> Response | str:
     if file.filename == '':
         flash({'title': 'Ошибка!', 'message': 'Вы не выбрали файл'})
         return redirect('recipe_creation')
-    if file and allowed_file(file.filename):
-        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
-        filename = secure_filename(f'{timestamp}_{file.filename}')
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-        ingredients_str = ';'.join(
-            [
-                f'{ing},{qty},{meas}'
-                for ing, qty, meas in zip(
-                    ingredient_list, quantity_list, measure_list
-                )
-            ]
-        )
-        Recipe.create(
-            dish_name=dish_name,
-            id_user=id_user,
-            food_category=food_category,
-            cooking_time=cooking_time,
-            ingredients=ingredients_str,
-            recipe=recipe_step,
-            file_path=file_path,
-        )
-        return redirect(url_for('account_user'))
+    if not (file and allowed_file(file.filename)):
+        flash({'title': 'Ошибка!', 'message': 'Неверный файл'})
+        return redirect('recipe_creation')
+    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+    filename = secure_filename(f'{timestamp}_{file.filename}')
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(file_path)
+    ingredients_str = ';'.join(
+        [
+            f'{ing},{qty},{meas}'
+            for ing, qty, meas in zip(
+                ingredient_list, quantity_list, measure_list
+            )
+        ]
+    )
+    Recipe.create(
+        dish_name=dish_name,
+        id_user=id_user,
+        food_category=food_category,
+        cooking_time=cooking_time,
+        ingredients=ingredients_str,
+        recipe=recipe_step,
+        file_path=file_path,
+    )
+    return redirect(url_for('account_user'))
 
 
 @app.route('/logout/')
