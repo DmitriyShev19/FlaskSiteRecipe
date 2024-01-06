@@ -311,12 +311,12 @@ def redirect_to_sign(response) -> Response:
     функция возвращает ответ без изменений.
 
     :param response: HTTP-ответ, который будет проверен на наличие кода 401.
-    :type response: flask.wrappers.Response
+    :type response: flask.wrappers. Response
 
     :return: HTTP-ответ, который был получен в качестве аргумента, если его код
             не равен 401. Если код равен 401, функция перенаправляет
             пользователя на страницу входа.
-    :rtype: Union[flask.wrappers.Response, werkzeug.utils.redirect]
+    :rtype: Union[flask.wrappers. Response, werkzeug.utils.redirect]
     """
     if response.status_code == 401:
         return redirect(url_for('input_user'))
